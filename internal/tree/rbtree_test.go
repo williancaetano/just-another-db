@@ -23,5 +23,11 @@ func TestInsertSearchOnRoot(t *testing.T) {
 	assert.Nil(t, err, "search should have not errored")
 	assert.NotNil(t, found, "search should have not found something")
 	assert.Equal(t, found, tree.root, "what was found is the tree's root")
+}
 
+func TestDeleteOnEmptyTree(t *testing.T) {
+	tree := RBTree[int]{}
+
+	err := tree.Delete(10)
+	assert.Nil(t, err, "err should be nil on delete noop")
 }
