@@ -17,11 +17,8 @@ func NewRBTree[T cmp.Ordered]() *RBTree[T] {
 }
 
 func (t *RBTree[T]) Search(data T) (*Node[T], error) {
-	if t.root.data == data {
-		return t.root, nil
-	}
-
 	curr := t.root
+
 	for curr != nil {
 		if curr.data == data {
 			return curr, nil
