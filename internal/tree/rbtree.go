@@ -10,6 +10,8 @@ type RBTree[T cmp.Ordered] struct {
 	count uint32
 }
 
+var _ Tree[int] = (*RBTree[int])(nil)
+
 func NewRBTree[T cmp.Ordered]() *RBTree[T] {
 	return &RBTree[T]{}
 }
@@ -34,10 +36,13 @@ func (t *RBTree[T]) Search(data T) (*Node[T], error) {
 }
 
 func (t *RBTree[T]) Insert(data T) error {
-	node := NewNode(data)
+	var err error
 
 	if t.root == nil {
-		t.root = node
+		t.root, err = NewNode(data, WithColor[T](BlackNode))
+		if err != nil {
+			return err
+		}
 		return nil
 	}
 

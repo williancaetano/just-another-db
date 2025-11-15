@@ -1,8 +1,8 @@
 package tree
 
-type NodeColor byte
+type Color byte
 
 const (
-	BlackNode NodeColor = iota + 1
-	RedNode   NodeColor = iota
+	RedNode Color = iota + 1
+	BlackNode
 )
