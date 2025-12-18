@@ -1,13 +1,37 @@
 package tree
 
-import "cmp"
+import (
+	"cmp"
+	"fmt"
+)
 
-type Node[T cmp.Ordered] struct {
+type NodeData interface {
+	cmp.Ordered
+}
+
+type Node[T NodeData] struct {
 	parent *Node[T]
 	left   *Node[T]
 	right  *Node[T]
 	color  Color
 	data   T
+}
+
+func (n *Node[T]) walk() {
+	if n == nil {
+		return
+	}
+
+	fmt.Println(n.String())
+	n.left.walk()
+	n.right.walk()
+}
+
+func (n *Node[T]) String() string {
+	if n == nil {
+		return "nill"
+	}
+	return fmt.Sprintf("Current: [%v] Parent [%p] Left: [%p] Right: [%p] Color: [%s]", n.data, n.parent, n.left, n.right, n.color.String())
 }
 
 type nodeOptions[T cmp.Ordered] func(*Node[T]) error
