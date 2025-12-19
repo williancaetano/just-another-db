@@ -84,11 +84,116 @@ func (t *RBTree[T]) PrintTree() {
 
 // }
 
-func (t *RBTree[T]) rebalance(*Node[T]) error {
-	//TODO: Implement Red black tree rebalancing after insertion
-	return nil
+// func (t *RBTree[T]) rebalance(n *Node[T]) error {
+// 	if n.parent == n.parent.parent.left {
+// 		uncle := n.parent.parent.right
+// 	} else if n.parent == n.parent.parent.right {
+// 		uncle := n.parent.parent.left
+// 		if n.parent.color == RedNode && uncle.color == RedNode {
+// 			n.parent.color = BlackNode
+// 			uncle.color = BlackNode
+// 			t.rebalance(n.parent.parent)
+// 		}
+// 	}
+// 	// TODO: Implement Red black tree rebalancing after insertion
+// 	return nil
+// }
+
+/*
+Before Rotation:
+
+    x
+     \
+      y
+     / \
+    a   b
+
+After Left Rotation:
+
+      y
+     / \
+    x   b
+     \
+      a
+*/
+
+func (t *RBTree[T]) rotateLeft(x *Node[T]) {
+	// nomenclature references the 'before' (eh antes)
+	y := x.right
+	a := y.left
+
+	// detach a and place it under x
+	// 'a' will always be on the right of 'x', because 'y' was on the right of 'x' and 'a' was 'a' child of 'y'
+	x.right = a
+	if a != nil {
+		a.parent = x
+	}
+
+	// rotate y upwards
+	subTreeParent := x.parent
+	if x.parent == nil {
+		// x is root
+		t.root = y
+	} else if subTreeParent.right == x {
+		// x is right child
+		subTreeParent.right = y
+	} else {
+		// x is left child
+		subTreeParent.left = y
+	}
+	y.parent = subTreeParent
+
+	// rearrange 'x'
+	y.left = x
+	x.parent = y
 }
 
-func leftRotation[T cmp.Ordered](x *Node[T]) *Node[T], error {
+/*
+Befor Right Rotation:
+
+      x
+     /
+    y
+   / \
+  a   b
+
+After Right Rotation:
+
+    y
+   / \
+  a   x
+     /
+    b
+*/
+
+func (t *RBTree[T]) rotateRight(x *Node[T]) {
+	// nomenclature references the 'before' (eh antes)
+	y := x.left
+	b := y.right
+
+	// detach a and place it under x
+	// 'a' will always be on the right of 'x', because 'y' was on the right of 'x' and 'a' was 'a' child of 'y'
+	x.left = b
+	if b != nil {
+		b.parent = x
+	}
+
+	// rotate y upwards
+	subTreeParent := x.parent
+	if x.parent == nil {
+		// x is the root
+		t.root = y
+	} else if subTreeParent.right == x {
+		// x is right child
+		subTreeParent.right = y
+	} else {
+		// x is left child
+		subTreeParent.left = y
+	}
+	y.parent = subTreeParent
+
+	// rearrange 'x'
+	y.right = x
+	x.parent = y
 
 }
